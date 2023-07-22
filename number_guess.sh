@@ -30,7 +30,7 @@ CREATE_USER() {
 OLD_USER() {
   USERNAME=$1
   USER_ID=$($PSQL "SELECT user_id FROM users WHERE username='$USERNAME'")
-  GAMES_COUNT=$($PSQL "SELECT COUNT(user_id) FROM games")
+  GAMES_COUNT=$($PSQL "SELECT COUNT(user_id) FROM games WHERE user_id=$USER_ID")
   BEST_GAME=$($PSQL "SELECT MIN(guess) FROM games WHERE user_id=$USER_ID")
   echo "Welcome back, $USERNAME! You have played $GAMES_COUNT games, and your best game took $BEST_GAME guesses."
 }
@@ -46,6 +46,9 @@ PLAY_GAME() {
     if [[  ! $GUESS =~ ^[0-9]+$ ]]
     then
       echo "That is not an integer, guess again:"
+    elif [[ $GUESS -eq 0 ]]
+    then
+      echo "0 is not a valid guess, please enter a number between 1 and 1000:"
     else
       ((GUESS_COUNT++))
       if [[ $GUESS -gt $RANDOM_NUMBER ]]
