@@ -1,4 +1,5 @@
 #!/bin/bash
+# Number guessing game by @itexpert120
 
 PSQL="psql --username=freecodecamp --dbname=number_guess -t --no-align -c"
 RANDOM_NUMBER=$((1 + $RANDOM % 1000))
@@ -31,7 +32,7 @@ OLD_USER() {
   USER_ID=$($PSQL "SELECT user_id FROM users WHERE username='$USERNAME'")
   GAMES_COUNT=$($PSQL "SELECT COUNT(user_id) FROM games")
   BEST_GAME=$($PSQL "SELECT MIN(guess) FROM games WHERE user_id=$USER_ID")
-  echo "Welcome back, $USERNAME! You have played $GAMES_COUNT, and your best game took $BEST_GAME guesses."
+  echo "Welcome back, $USERNAME! You have played $GAMES_COUNT games, and your best game took $BEST_GAME guesses."
 }
 
 PLAY_GAME() {
